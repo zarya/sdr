@@ -87,7 +87,7 @@ class app_top_block(grc_wxgui.top_block_gui):
                 fft_rate=15,
                 average=True,
                 avg_alpha=None,
-                title="FFT Plot",
+                title="RTL Output",
                 peak_hold=False,
             )
             self.Add(self.fftsink.win)
@@ -104,7 +104,7 @@ class app_top_block(grc_wxgui.top_block_gui):
                 fft_rate=15,
                 average=True,
                 avg_alpha=None,
-                title="FFT Plot Decoder input",
+                title="Decoder input (After the filters)",
                 peak_hold=False,
             )
             self.Add(self.fftsink2.win)
