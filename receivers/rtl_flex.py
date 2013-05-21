@@ -109,7 +109,7 @@ class app_top_block(grc_wxgui.top_block_gui):
             )
             self.Add(self.fftsink2.win)
 
-        self.flex = pager.flex_demod(queue, options.freq, options.verbose, options.log)
+        self.flex = pager.flex_demod(queue, options.freq, options.verbose)
 
         self.connect(self.u, self.chan, self.flex)
         if self.fft_enable:
