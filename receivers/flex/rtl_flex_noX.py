@@ -39,7 +39,7 @@ class app_top_block(gr.top_block):
         self.verbose = options.verbose
 
         # Set up rtl source
-        self.u = osmosdr.source_c( args="nchan=" + str(1) + " " + "rtl=0" )
+        self.u = osmosdr.source_c( args="%s"%(options.device) )
         #set Freq
         self.u.set_center_freq(options.freq+options.calibration, 0)
 
@@ -99,6 +99,7 @@ def get_options():
                       help="set frequency offset to Hz", metavar="Hz")
     parser.add_option("-v", "--verbose", action="store_true", default=False)
     parser.add_option("-d" ,"--database", default=False, help="sqlalchemy connection string for database")
+    parser.add_option("-D" ,"--device", default="rtl=0", help="osmocom device string example: rtl=0")
 
     (options, args) = parser.parse_args()
 

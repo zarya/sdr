@@ -43,7 +43,7 @@ class app_top_block(grc_wxgui.top_block_gui):
         self.fft_enable = options.fft
 
         # Set up rtl source
-        self.u = osmosdr.source_c( args="nchan=" + str(1) + " " + "rtl=0" )
+        self.u = osmosdr.source_c( args="%s"%(options.device) )
         #set Freq
         self.u.set_center_freq(options.freq+options.calibration, 0)
 
@@ -143,6 +143,7 @@ def get_options():
     parser.add_option("", "--fft", action="store_true", default=False,
                       help="Enable fft plots")
     parser.add_option("-d" ,"--database", default=False, help="sqlalchemy connection string for database")
+    parser.add_option("-D" ,"--device", default="rtl=0", help="osmocom device string example: rtl=0")
 
     (options, args) = parser.parse_args()
 
