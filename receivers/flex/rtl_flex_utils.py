@@ -26,6 +26,9 @@ _trans_table = make_trans_table()
 def make_printable(s):
     return s.translate(_trans_table)
 
+def filter_non_printable(str):
+  return ''.join([c for c in str if ord(c) > 31 or ord(c) == 9])
+
 class queue_runner(_threading.Thread):
     def __init__(self, msgq, options):
         _threading.Thread.__init__(self)
@@ -47,7 +50,7 @@ class queue_runner(_threading.Thread):
             data = split(msg.to_string(), chr(128))
             i = self.table.insert()
             i.execute(
-                timestamp=time.time(), freq=data[0], cap=data[1], type=data[2],message=data[3]
+                timestamp=int(time.time()), freq=data[0], cap=data[1], type=data[2],message=filter_non_printable(data[3])
             )
             s = make_printable(page)
             print msg.type(), s
