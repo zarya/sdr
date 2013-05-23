@@ -27,6 +27,7 @@ from gnuradio.gr import firdes
 from gnuradio.wxgui import fftsink2
 from grc_gnuradio import wxgui as grc_wxgui
 from optparse import OptionParser
+import rtl_flex_utils
 import osmosdr
 import wx
 import time
@@ -141,6 +142,7 @@ def get_options():
     parser.add_option("-v", "--verbose", action="store_true", default=False)
     parser.add_option("", "--fft", action="store_true", default=False,
                       help="Enable fft plots")
+    parser.add_option("-d" ,"--database", default=False, help="sqlalchemy connection string for database")
 
     (options, args) = parser.parse_args()
 
@@ -158,7 +160,7 @@ if __name__ == "__main__":
     (options, args) = get_options()
     queue = gr.msg_queue()
     tb = app_top_block(options, queue)
-    runner = pager.queue_runner(queue)
+    runner = rtl_flex_utils.queue_runner(queue,options)
 
     try:
         tb.Run(True)

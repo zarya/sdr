@@ -28,6 +28,7 @@ from optparse import OptionParser
 import osmosdr
 import time
 import sys
+import rtl_flex_utils
 
 class app_top_block(gr.top_block):
     def __init__(self, options, queue):
@@ -97,6 +98,7 @@ def get_options():
     parser.add_option("-c",   "--calibration", type="eng_float", default=0.0,
                       help="set frequency offset to Hz", metavar="Hz")
     parser.add_option("-v", "--verbose", action="store_true", default=False)
+    parser.add_option("-d" ,"--database", default=False, help="sqlalchemy connection string for database")
 
     (options, args) = parser.parse_args()
 
@@ -114,7 +116,7 @@ if __name__ == "__main__":
     (options, args) = get_options()
     queue = gr.msg_queue()
     tb = app_top_block(options, queue)
-    runner = pager.queue_runner(queue)
+    runner = rtl_flex_utils.queue_runner(queue,options)
 
     try:
         tb.run()
