@@ -47,7 +47,7 @@ class queue_runner(_threading.Thread):
             data = split(msg.to_string(), chr(128))
             i = self.table.insert()
             i.execute(
-                freq=data[0], cap=data[1], type=data[2],message=data[3]
+                timestamp=time.time(), freq=data[0], cap=data[1], type=data[2],message=data[3]
             )
             s = make_printable(page)
             print msg.type(), s
