@@ -34,6 +34,7 @@ class queue_runner(_threading.Thread):
         _threading.Thread.__init__(self)
         self.msgq = msgq
         self.done = False
+        self.options = options
         if options.database != False:
             self.db = sqlalchemy.create_engine(options.database)
             metadata = sqlalchemy.MetaData(self.db)
@@ -48,10 +49,11 @@ class queue_runner(_threading.Thread):
 
             page = join(split(msg.to_string(), chr(128)), '|')
             data = split(msg.to_string(), chr(128))
-            i = self.table.insert()
-            i.execute(
-                timestamp=int(time.time()), freq=data[0], cap=data[1], type=data[2],message=filter_non_printable(data[3])
-            )
+            if self.options.database != False:
+                i = self.table.insert()
+                i.execute(
+                    timestamp=int(time.time()), freq=data[0], cap=data[1], type=data[2],message=filter_non_printable(data[3])
+                )
             s = make_printable(page)
             print msg.type(), s
 
