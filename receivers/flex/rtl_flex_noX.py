@@ -19,11 +19,12 @@
 #
 from gnuradio import eng_notation
 from gnuradio import gr
+from gnuradio import filter
 from gnuradio import window
 from gnuradio import pager
-from gnuradio import optfir
+from gnuradio.filter import optfir
 from gnuradio.eng_option import eng_option
-from gnuradio.gr import firdes
+from gnuradio.filter import firdes
 from optparse import OptionParser
 import osmosdr
 import time
@@ -37,9 +38,10 @@ class app_top_block(gr.top_block):
         self.offset = 0.0
         self.adj_time = time.time()
         self.verbose = options.verbose
+        self.log = options.log
 
         # Set up rtl source
-        self.u = osmosdr.source_c( args="%s"%(options.device) )
+        self.u = osmosdr.source( args="%s"%(options.device) )
         #set Freq
         self.u.set_center_freq(options.freq+options.calibration, 0)
 
@@ -67,11 +69,11 @@ class app_top_block(gr.top_block):
                                60)
 
 
-        self.chan = gr.freq_xlating_fir_filter_ccf(10,
+        self.chan = filter.freq_xlating_fir_filter_ccf(10,
                                                    taps,
                                                    0.0,
                                                    250e3)
-        self.flex = pager.flex_demod(queue, options.freq, options.verbose)
+        self.flex = pager.flex_demod(queue, options.freq, options.verbose, options.log)
 
         self.connect(self.u, self.chan, self.flex)
 
@@ -98,6 +100,7 @@ def get_options():
     parser.add_option("-c",   "--calibration", type="eng_float", default=0.0,
                       help="set frequency offset to Hz", metavar="Hz")
     parser.add_option("-v", "--verbose", action="store_true", default=False)
+    parser.add_option("", "--log", action="store_true", default=False)
     parser.add_option("-d" ,"--database", default=False, help="sqlalchemy connection string for database")
     parser.add_option("-D" ,"--device", default="rtl=0", help="osmocom device string example: rtl=0")
 
