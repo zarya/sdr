@@ -20,7 +20,6 @@
 from gnuradio import eng_notation
 from gnuradio import gr
 from gnuradio import filter
-from gnuradio import window
 from gnuradio import pager
 from gnuradio.filter import optfir
 from gnuradio.eng_option import eng_option
